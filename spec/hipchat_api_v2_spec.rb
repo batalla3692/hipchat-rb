@@ -411,4 +411,26 @@ describe "HipChat (API V2)" do
       lambda { user.send_file "", file }.should raise_error(HipChat::Unauthorized)
     end
   end
+
+  describe '#create_user' do
+    include_context 'HipChatV2'
+    let(:name)  { 'Leonardo da Vinci' }
+    let(:email) { 'ldavinci@email.com' }
+    let(:long_name) { 'Allow me to introduce myself, I am Leonardo da Vinci, the best inventor of ever.' }
+    let(:options_param) { { :title => 'Inventor', :mention_name => 'LeoDaVinci' } }
+
+    it 'successfully with required params' do
+      mock_successful_user_create(name, email)
+      lambda { user.create(name, email) }.should be_truthy
+    end
+
+    it 'successfully with optional params' do
+      mock_successful_user_create(name, email, options_param)
+      lambda { user.create(name, email, options_param) }.should be_truthy
+    end
+
+    it 'but fails when the name is too long' do
+      lambda { user.create(long_name, email) }.should raise_error(HipChat::UsernameTooLong)
+    end
+  end
 end
