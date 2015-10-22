@@ -184,16 +184,16 @@ describe "HipChat (API V1)" do
 
     it 'successfully with required params' do
       mock_successful_user_create(name, email)
-      lambda { user.create(name, email) }.should be_truthy
+      lambda { subject.create_user(name, email) }.should be_truthy
     end
 
     it 'successfully with optional params' do
       mock_successful_user_create(name, email, options_param)
-      lambda { user.create(name, email, options_param) }.should be_truthy
+      lambda { subject.create_user(name, email, options_param) }.should be_truthy
     end
 
     it 'but fails when the name is too long' do
-      lambda { user.create(long_name, email) }.should raise_error(HipChat::UsernameTooLong)
+      lambda { subject.create_user(long_name, email) }.should raise_error(HipChat::UsernameTooLong)
     end
   end
 

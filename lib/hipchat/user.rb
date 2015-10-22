@@ -99,41 +99,8 @@ module HipChat
     end
 
     #
-    # Create a new user.
+    # Delete a user.
     #
-    def create(name, email, options={})
-      if name.length > 50
-        raise UsernameTooLong, "Username #{name} too long (#{name.length} characters long). Limit is 50."
-      end
-
-      options = {
-        :auth_token => @token,
-        :is_group_admin => false,
-        :timezone => 'UTC'
-      }.merge(options)
-
-      response = self.class.post(
-        @api.create_config[:url],
-        :query => {
-          :name     => name,
-          :email    => email,
-          :title    => options[:name],
-          :timezone => options[:timezone],
-          :password => options[:password],
-          :mention_name   => options[:mention_name],
-          :is_group_admin => options[:is_group_admin]
-        },
-        :headers => @api.headers
-      )
-
-      case response.code
-        when 200, 201
-          User.new(@token, response.merge(:api_version => @api.version))
-        else
-          raise UnknownResponseCode, "Unexpected #{response.code} for user #{name} creation."
-      end
-    end
-
     def delete
       response = self.class.send(
         @api.delete_config[:method],
