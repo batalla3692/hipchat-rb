@@ -267,6 +267,23 @@ module HipChat
           }
         }[version]
       end
+
+      def delete_config
+        {
+          'v1' => {
+            :url => URI::escape('/delete'),
+            :method => :post,
+            :query_params => { :user_id => user_id },
+            :body_format => :to_json
+          },
+          'v2' => {
+            :url => URI::escape("/#{user_id}"),
+            :method => :delete,
+            :query_params => { :id_or_email => user_id },
+            :body_format => :to_json
+          }
+        }[version]
+      end
     end
   end
 end

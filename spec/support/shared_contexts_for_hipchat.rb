@@ -77,8 +77,26 @@ shared_context "HipChatV1" do
           :mention_name   => options[:mention_name],
           :is_group_admin => options[:is_group_admin]
         },
-        :headers => {'Accept' => 'application/json',
-                     'Content-Type' => 'application/x-www-form-urlencoded'}
+        :headers => {
+          'Accept' => 'application/json',
+          'Content-Type' => 'application/x-www-form-urlencoded'
+        }
+      ).to_return(
+      :status  => 200,
+      :body    => '',
+      :headers => {}
+    )
+  end
+
+  def mock_successful_user_delete(user_id)
+    stub_request(:delete, 'https://api.hipchat.com/v1/users/delete')
+      .with(
+        :query => { :auth_toke => 'blah' },
+        :body => { :user_id => user_id },
+        :headers => {
+          'Accept' => 'application/json',
+          'Content-Type' => 'application/x-www-form-urlencoded'
+        }
       ).to_return(
       :status  => 200,
       :body    => '',
@@ -257,10 +275,27 @@ shared_context "HipChatV2" do
           :mention_name   => options[:mention_name],
           :is_group_admin => options[:is_group_admin]
         },
-        :headers => {'Accept' => 'application/json',
-                     'Content-Type' => 'multipart/related; boundary=sendfileboundary'}
+        :headers => {
+          'Accept' => 'application/json',
+          'Content-Type' => 'multipart/related; boundary=sendfileboundary'
+        }
       ).to_return(
       :status  => 201,
+      :body    => '',
+      :headers => {}
+    )
+  end
+
+  def mock_successful_user_delete(user_id)
+    stub_request(:delete, "https://api.hipchat.com/v2/user/#{user_id}")
+      .with(
+        :query => { :auth_toke => 'blah' },
+        :headers => {
+          'Accept' => 'application/json',
+          'Content-Type' => 'multipart/related; boundary=sendfileboundary'
+        }
+      ).to_return(
+      :status  => 204,
       :body    => '',
       :headers => {}
     )

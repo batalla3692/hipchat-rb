@@ -433,4 +433,14 @@ describe "HipChat (API V2)" do
       lambda { user.create(long_name, email) }.should raise_error(HipChat::UsernameTooLong)
     end
   end
+
+  describe '#delete_user' do
+    include_context 'HipChatV2'
+    let(:user_id) { '1234' }
+
+    it 'successfully with required params' do
+      mock_successful_user_delete(user_id)
+      lambda { user.delete(user_id) }.should be_truthy
+    end
+  end
 end
