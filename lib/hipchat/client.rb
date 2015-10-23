@@ -79,7 +79,7 @@ module HipChat
       }.merge(options)
 
       response = self.class.post(
-        @api.create_config[:url],
+        @api.create_user_config[:url],
         :query => {
           :name     => name,
           :email    => email,
