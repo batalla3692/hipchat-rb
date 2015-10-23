@@ -5,6 +5,7 @@ describe "HipChat (API V1)" do
   subject { HipChat::Client.new("blah", :api_version => @api_version) }
 
   let(:room) { subject["Hipchat"] }
+  let(:user) { subject.user('12345678') }
 
   describe "#history" do
     include_context "HipChatV1"
@@ -171,6 +172,38 @@ describe "HipChat (API V1)" do
 
       expect { HipChat::Client.new("blah", :api_version => @api_version).user('12345678').send('nope') }.
         to raise_error(HipChat::InvalidApiVersion)
+    end
+  end
+
+  describe '#create user' do
+    include_context 'HipChatV1'
+    let(:name)  { 'Leonardo' }
+    let(:email) { 'ldavinci@email.com' }
+    let(:long_name) { 'Allow me to introduce myself, I am Leonardo da Vinci, the best inventor of ever.' }
+    let(:options_param) { { :title => 'Inventor', :mention_name => 'LeoDaVinci' } }
+
+    it 'successfully with required params' do
+      mock_successful_user_create(name, email)
+      lambda { subject.create_user(name, email) }.should be_truthy
+    end
+
+    it 'successfully with optional params' do
+      mock_successful_user_create(name, email, options_param)
+      lambda { subject.create_user(name, email, options_param) }.should be_truthy
+    end
+
+    it 'but fails when the name is too long' do
+      lambda { subject.create_user(long_name, email) }.should raise_error(HipChat::UsernameTooLong)
+    end
+  end
+
+  describe '#delete user' do
+    include_context 'HipChatV1'
+    let(:user_id) { '1234' }
+
+    it 'successfully with required params' do
+      mock_successful_user_delete(user_id)
+      lambda { user.delete(user_id) }.should be_truthy
     end
   end
 end

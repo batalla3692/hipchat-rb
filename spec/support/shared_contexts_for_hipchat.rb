@@ -63,6 +63,46 @@ shared_context "HipChatV1" do
                                           :body => '{"room": {"room_id": "1234", "name" : "A Room"}}',
                                           :headers => {})
   end
+
+  def mock_successful_user_create(name, email, options={})
+    stub_request(:post, 'https://api.hipchat.com/v1/users/create')
+      .with(
+        :query   => { :auth_token => 'blah' },
+        :body    => {
+          :name     => name,
+          :email    => email,
+          :title    => options[:title],
+          :timezone => options[:timezone],
+          :password => options[:password],
+          :mention_name   => options[:mention_name],
+          :is_group_admin => options[:is_group_admin]
+        },
+        :headers => {
+          'Accept' => 'application/json',
+          'Content-Type' => 'application/x-www-form-urlencoded'
+        }
+      ).to_return(
+      :status  => 200,
+      :body    => '',
+      :headers => {}
+    )
+  end
+
+  def mock_successful_user_delete(user_id)
+    stub_request(:delete, 'https://api.hipchat.com/v1/users/delete')
+      .with(
+        :query => { :auth_toke => 'blah' },
+        :body => { :user_id => user_id },
+        :headers => {
+          'Accept' => 'application/json',
+          'Content-Type' => 'application/x-www-form-urlencoded'
+        }
+      ).to_return(
+      :status  => 200,
+      :body    => '',
+      :headers => {}
+    )
+  end
 end
 
 shared_context "HipChatV2" do
@@ -220,5 +260,44 @@ shared_context "HipChatV2" do
                                    :body    => "--sendfileboundary\nContent-Type: application/json; charset=UTF-8\nContent-Disposition: attachment; name=\"metadata\"\n\n{\"message\":\"Equal bytes for everyone\"}\n--sendfileboundary\nContent-Type: ; charset=UTF-8\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment; name=\"file\"; filename=\"#{File.basename(file)}\"\n\ndGhlIGNvbnRlbnQ=\n\n--sendfileboundary--",
                                    :headers => {'Accept' => 'application/json',
                                                 'Content-Type' => 'multipart/related; boundary=sendfileboundary'}).to_return(:status => 200, :body => "", :headers => {})
+  end
+
+  def mock_successful_user_create(name, email, options={})
+    stub_request(:post, 'https://api.hipchat.com/v2/user')
+      .with(
+        :query   => { :auth_token => 'blah' },
+        :body    => {
+          :name     => name,
+          :email    => email,
+          :title    => options[:title],
+          :timezone => options[:timezone],
+          :password => options[:password],
+          :mention_name   => options[:mention_name],
+          :is_group_admin => options[:is_group_admin]
+        },
+        :headers => {
+          'Accept' => 'application/json',
+          'Content-Type' => 'multipart/related; boundary=sendfileboundary'
+        }
+      ).to_return(
+      :status  => 201,
+      :body    => '',
+      :headers => {}
+    )
+  end
+
+  def mock_successful_user_delete(user_id)
+    stub_request(:delete, "https://api.hipchat.com/v2/user/#{user_id}")
+      .with(
+        :query => { :auth_toke => 'blah' },
+        :headers => {
+          'Accept' => 'application/json',
+          'Content-Type' => 'multipart/related; boundary=sendfileboundary'
+        }
+      ).to_return(
+      :status  => 204,
+      :body    => '',
+      :headers => {}
+    )
   end
 end
