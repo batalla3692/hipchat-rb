@@ -72,11 +72,11 @@ module HipChat
       def create_user_config
         {
           'v1' => {
-            :url => URI::escape('/create'),
+            :url => URI::escape('/users/create'),
             :body_format => :to_json
           },
           'v2' => {
-            :url => '',
+            :url => URI::escape('/user'),
             :body_format => :to_json
           }
         }[version]
