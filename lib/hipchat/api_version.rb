@@ -68,6 +68,19 @@ module HipChat
           }
         }[version]
       end
+
+      def create_user_config
+        {
+          'v1' => {
+            :url => URI::escape('/create'),
+            :body_format => :to_json
+          },
+          'v2' => {
+            :url => '',
+            :body_format => :to_json
+          }
+        }[version]
+      end
     end
 
     class Room < ApiVersion
@@ -253,19 +266,6 @@ module HipChat
           :body_format => :to_json,
           :allowed_params => [:'max-results', :timezone, :'not-before']
         }
-      end
-
-      def create_config
-        {
-          'v1' => {
-            :url => URI::escape('/create'),
-            :body_format => :to_json
-          },
-          'v2' => {
-            :url => '',
-            :body_format => :to_json
-          }
-        }[version]
       end
 
       def delete_config
