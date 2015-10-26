@@ -89,7 +89,7 @@ module HipChat
           :mention_name   => options[:mention_name],
           :is_group_admin => options[:is_group_admin]
         },
-        :headers => @api.headers
+        :headers => @api.headers.merge({:'Authorization' => "Bearer #{@token}"})
       )
 
       case response.code
