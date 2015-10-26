@@ -88,7 +88,7 @@ module HipChat
           # :password => options[:password],
           # :mention_name   => options[:mention_name],
           # :is_group_admin => options[:is_group_admin],
-        },
+        }.to_json,
         :headers => @api.headers
       )
 
