@@ -72,29 +72,33 @@ module HipChat
         raise UsernameTooLong, "Username #{name} too long (#{name.length} characters long). Limit is 50."
       end
 
-      # options = {
-      #   :is_group_admin => false,
-      #   :timezone => 'UTC'
-      # }.merge(options)
+      options = {
+        :is_group_admin => false,
+        :timezone => 'UTC'
+      }.merge(options)
 
       response = self.class.post(
         @api.create_user_config[:url],
         :query => { :auth_token => @token },
         :body => {
           :name     => name,
-          :email    => email
-          # :title    => options[:name],
-          # :timezone => options[:timezone],
-          # :password => options[:password],
-          # :mention_name   => options[:mention_name],
-          # :is_group_admin => options[:is_group_admin],
-        }.to_json,
+          :email    => email,
+          :title    => options[:name],
+          :timezone => options[:timezone],
+          :password => options[:password],
+          :mention_name   => options[:mention_name],
+          :is_group_admin => options[:is_group_admin]
+        }.send(@api.create_user_config[:body_format]),
         :headers => @api.headers
       )
 
       case response.code
         when 200, 201
           HipChat::User.new(@token, response.merge(:api_version => @api.version))
+        when 400
+          raise UnknownRoom,  "Error: #{response.message}"
+        when 401
+          raise Unauthorized, 'Access denied'
         else
           raise UnknownResponseCode, "Unexpected #{response.code} for user #{name} creation."
       end

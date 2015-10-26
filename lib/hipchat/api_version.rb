@@ -73,7 +73,7 @@ module HipChat
         {
           'v1' => {
             :url => URI::escape('/users/create'),
-            :body_format => :to_json
+            :body_format => :to_hash
           },
           'v2' => {
             :url => URI::escape('/user'),
