@@ -87,11 +87,10 @@ module HipChat
           :timezone => options[:timezone],
           :password => options[:password],
           :mention_name   => options[:mention_name],
-          :is_group_admin => options[:is_group_admin]
+          :is_group_admin => options[:is_group_admin],
+          :auth_token     => @token
         },
-        :headers => {'Accept' => 'application/json',
-                     'Content-Type' => 'application/json',
-        'Authorization' => "Bearer #{@token}"}
+        :headers => @api.headers
       )
 
       case response.code
