@@ -72,6 +72,8 @@ module HipChat
         raise UsernameTooLong, "Username #{name} too long (#{name.length} characters long). Limit is 50."
       end
 
+      @api.headers['Authorization'] = "Bearer #{@token}"
+
       options = {
         :auth_token => @token,
         :is_group_admin => false,
@@ -89,7 +91,7 @@ module HipChat
           :mention_name   => options[:mention_name],
           :is_group_admin => options[:is_group_admin]
         },
-        :headers => @api.headers.merge({'Authorization' => "Bearer #{@token}"})
+        :headers => @api.headers
       )
 
       case response.code
