@@ -72,23 +72,13 @@ module HipChat
         raise UsernameTooLong, "Username #{name} too long (#{name.length} characters long). Limit is 50."
       end
 
-      options = {
-        :is_group_admin => false,
-        :timezone => 'UTC'
-      }.merge(options)
-
       response = self.class.post(
         @api.create_user_config[:url],
         :query => { :auth_token => @token },
         :body => {
           :name     => name,
-          :email    => email,
-          :title    => options[:name],
-          :timezone => options[:timezone],
-          :password => options[:password],
-          :mention_name   => options[:mention_name],
-          :is_group_admin => options[:is_group_admin]
-        }.send(@api.create_user_config[:body_format]),
+          :email    => email
+        }.merge(options).send(@api.create_user_config[:body_format]),
         :headers => @api.headers
       )
 
