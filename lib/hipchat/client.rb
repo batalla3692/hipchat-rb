@@ -73,14 +73,14 @@ module HipChat
       end
 
       options = {
-        :auth_token => @token,
         :is_group_admin => false,
         :timezone => 'UTC'
       }.merge(options)
 
       response = self.class.post(
         @api.create_user_config[:url],
-        :query => {
+        :query => { :auth_token => @token },
+        :body => {
           :name     => name,
           :email    => email,
           :title    => options[:name],
@@ -88,7 +88,6 @@ module HipChat
           :password => options[:password],
           :mention_name   => options[:mention_name],
           :is_group_admin => options[:is_group_admin],
-          :auth_token     => @token
         },
         :headers => @api.headers
       )
