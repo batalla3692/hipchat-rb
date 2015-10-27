@@ -346,7 +346,7 @@ describe "HipChat (API V2)" do
     it "successfully with a standard message" do
       mock_successful_user_send 'Equal bytes for everyone'
 
-      expect(user.send('Equal bytes for everyone')).to be_truthy
+      lambda{user.send('Equal bytes for everyone')}.should be_truthy
     end
 
     it "but fails when the user doesn't exist" do
