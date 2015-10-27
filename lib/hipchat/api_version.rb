@@ -202,6 +202,14 @@ module HipChat
           }
         }[version]
       end
+
+      def add_member_config
+        {
+          'v2' => {
+            :url => URI::escape("/#{room_id}/member")
+          }
+        }[version]
+      end
     end
 
     class User

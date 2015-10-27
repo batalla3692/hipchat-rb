@@ -316,6 +316,29 @@ module HipChat
       end
     end
 
+    #
+    # Add a member to a private room.
+    #
+    def add_member(user_id)
+      url = URI::escape(@api.add_member_config[:url] + "/#{user_id}")
+      response = self.class.put(
+        url,
+        :query => { :auth_token => @token },
+        :headers => @api.headers
+      )
+
+      case response.code
+        when 204
+          true
+        when 404
+          raise UnknownRoom,  "Unknown room: `#{room_id}'"
+        when 401
+          raise Unauthorized, "Access denied to room `#{room_id}'"
+        else
+          raise UnknownResponseCode, "Unexpected #{response.code} for room `#{room_id}'"
+      end
+    end
+
     private
       def symbolize(obj)
         return obj.reduce({}) do |memo, (k, v)|

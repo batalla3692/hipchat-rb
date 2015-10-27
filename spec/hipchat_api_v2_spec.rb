@@ -341,6 +341,15 @@ describe "HipChat (API V2)" do
     end
   end
 
+  describe '#add member to room' do
+    include_context 'HipChatV2'
+
+    it 'successfully with user_id' do
+      mock_successful_add_member('1234')
+      lambda{room.add_member('1234')}.should be_truthy
+    end
+  end
+
   describe "#send user message" do
     include_context "HipChatV2"
     it "successfully with a standard message" do

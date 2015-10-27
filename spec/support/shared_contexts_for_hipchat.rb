@@ -289,7 +289,7 @@ shared_context "HipChatV2" do
   def mock_successful_user_delete(user_id)
     stub_request(:delete, "https://api.hipchat.com/v2/user/#{user_id}")
       .with(
-        :query => { :auth_toke => 'blah' },
+        :query => { :auth_token => 'blah' },
         :headers => {
           'Accept' => 'application/json',
           'Content-Type' => 'multipart/related; boundary=sendfileboundary'
@@ -298,6 +298,21 @@ shared_context "HipChatV2" do
       :status  => 204,
       :body    => '',
       :headers => {}
+    )
+  end
+
+  def mock_successful_add_member(user_id)
+    stub_request(:put, "https://api.hipchat.com/v2/room/1234/member/#{user_id}")
+      .with(
+        :query => { :auth_token => 'blah' },
+        :headers => {
+          'Accept' => 'application/json',
+          'Content-Type' => 'multipart/related; boundary=sendfileboundary'
+        }
+      ).to_return(
+         :status  => 204,
+         :body    => '',
+         :headers => {}
     )
   end
 end
