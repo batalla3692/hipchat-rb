@@ -339,6 +339,54 @@ module HipChat
       end
     end
 
+    #
+    # Create a new room
+    #
+    def create_webhook(url, event, options={})
+      response = self.class.post(
+        @api.create_webhook_config[:url],
+        :query => { :auth_token => @token },
+        :body => {
+          :url => url,
+          :event => event
+        }.merge(options).send(@api.send_config[:body_format]),
+        :headers => @api.headers
+      )
+
+      case response.code
+        when 201
+          response
+        when 404
+          raise UnknownRoom,  "Unknown room: `#{room_id}'"
+        when 401
+          raise Unauthorized, "Access denied to room `#{room_id}'"
+        else
+          raise UnknownResponseCode, "Unexpected #{response.code} for room `#{room_id}'"
+      end
+    end
+
+    #
+    # Delete a webhook
+    #
+    def delete_webhook
+
+    end
+
+    #
+    # Get or List webhooks.
+    #
+    # Usage
+    #
+    # Default: List all webhooks
+    # get_webhook
+    #
+    # Get specific webhook information
+    # get_webhook('some id')
+    #
+    def get_webhook(webhook_id = '')
+
+    end
+
     private
       def symbolize(obj)
         return obj.reduce({}) do |memo, (k, v)|
