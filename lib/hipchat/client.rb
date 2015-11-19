@@ -86,7 +86,7 @@ module HipChat
         when 200, 201
           HipChat::User.new(@token, response.merge(:api_version => @api.version))
         when 400
-          raise UnknownRoom,  "Error: #{response.message}"
+          raise BadRequest,  "Error: #{response.message}"
         when 401
           raise Unauthorized, 'Access denied'
         else

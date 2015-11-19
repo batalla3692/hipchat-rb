@@ -109,10 +109,10 @@ module HipChat
       )
 
       case response.code
-        when 204, 200
+        when 204, 200, 404 # Return 404 when user does not exist actually.
           true
         else
-          raise UnknownResponseCode, "Unexpected #{response.code} for user #{name} creation."
+          raise UnknownResponseCode, "Unexpected #{response.code} for user #{name} deletion."
       end
     end
   end
