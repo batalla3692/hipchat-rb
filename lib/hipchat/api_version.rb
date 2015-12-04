@@ -219,6 +219,15 @@ module HipChat
           }
         }[version]
       end
+
+      def get_webhook_config
+        {
+          'v2' => {
+            :url => URI::escape("/#{room_id}/webhook"),
+            :body_format => :to_json
+          }
+        }[version]
+      end
     end
 
     class User

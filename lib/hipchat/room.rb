@@ -377,14 +377,30 @@ module HipChat
     #
     # Usage
     #
-    # Default: List all webhooks
+    # Default: List all webhooks:
     # get_webhook
     #
-    # Get specific webhook information
+    # Get specific webhook information:
     # get_webhook('some id')
     #
     def get_webhook(webhook_id = '')
+      id_path = webhook_id != '' ? "/#{webhook_id}" : ''
+      response = self.class.get(
+        @api.get_webhook_config[:url] + id_path,
+        :query => { :auth_token => @token },
+        :headers => @api.headers
+      )
 
+      case response.code
+        when 200
+          response
+        when 404
+          raise UnknownRoom,  "Unknown room: `#{room_id}'"
+        when 401
+          raise Unauthorized, "Access denied to room `#{room_id}'"
+        else
+          raise UnknownResponseCode, "Unexpected #{response.code} for room `#{room_id}'"
+      end
     end
 
     private
