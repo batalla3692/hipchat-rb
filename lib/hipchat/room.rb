@@ -107,8 +107,8 @@ module HipChat
     # +notify+:: true or false
     #            (default false)
     def send(from, message, options_or_notify = {})
-      if from.length > 15
-        raise UsernameTooLong, "Username #{from} is `#{from.length} characters long. Limit is 15'"
+      if from.length > 25
+        raise UsernameTooLong, "Username #{from} is `#{from.length} characters long. Limit is 25'"
       end
       options = if options_or_notify == true or options_or_notify == false
         warn 'DEPRECATED: Specify notify flag as an option (e.g., :notify => true)'
